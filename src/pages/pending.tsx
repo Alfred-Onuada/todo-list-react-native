@@ -21,7 +21,11 @@ export default function Pending({ route, navigation }: { route: any, navigation:
         const todos = await getData("tasks");
 
         if (todos != null) {
-          setTodos(todos.filter((todo: ITasks) => todo.completed === false));
+          if (route.params.type === "today") {
+            setTodos(todos.filter((todo: ITasks) => (todo.completed === false && new Date(todo.due).getDate() == new Date(Date.now()).getDate())));
+          } else {
+            setTodos(todos.filter((todo: ITasks) => todo.completed === false));
+          }
         } else {
           setTodos([]);
         }
