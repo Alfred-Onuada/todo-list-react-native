@@ -19,6 +19,36 @@ export function getData(key: string): Promise<ITasks[] | null> {
   });
 };
 
+export function getLists(): Promise<string[] | null> {
+  return new Promise((resolve, reject) => {
+    try {
+      AsyncStorage.getItem("lists")
+        .then((value) => {
+          if (value !== null) {
+            resolve(JSON.parse(value));
+          } else {
+            resolve(null);
+          }
+        })
+        .catch((error) => reject(error));
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export function saveLists(lists: string[]): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    try {
+      AsyncStorage.setItem("lists", JSON.stringify(lists));
+
+      resolve(true);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 export function storeData(key: string, value: any): Promise<boolean> {
   return new Promise((resolve, reject) => {
     try {
@@ -85,3 +115,23 @@ export function clearCompleted(key: string): Promise<boolean> {
     }
   });
 }
+
+export function getCountOfTasksInList(key: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    try {
+      AsyncStorage.getItem(key)
+        .then((value) => {
+          if (value !== null) {
+            const tasks = JSON.parse(value);
+
+            resolve(tasks.length);
+          } else {
+            resolve(0);
+          }
+        })
+        .catch((error) => reject(error));
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

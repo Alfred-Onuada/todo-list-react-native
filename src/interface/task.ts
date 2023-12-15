@@ -5,4 +5,5 @@ export interface ITasks {
   due: Date;
   completed: boolean;
   completedOn: Date | null;
+  customList?: string;
 }

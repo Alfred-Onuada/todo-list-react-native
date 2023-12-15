@@ -7,6 +7,7 @@ export default function Category({ name, count }: { name: string, count: number 
         { (name == "Today") && <Text style={styles.count}>🗓️</Text> }
         { (name == "All") && <Text style={styles.count}>🗃️</Text> }
         { (name == "Completed") && <Text style={styles.count}>✅</Text> }
+        { (name != "Today" && name != "All" && name != "Completed") && (<Text style={styles.count}>📋</Text>) }
         <Text style={styles.count}>{ count }</Text>
       </View>
       <Text style={styles.name}>{ name }</Text>

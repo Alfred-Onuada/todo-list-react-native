@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View, Text, TextInput } from "react-native"
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState } from "react";
-import { getData, storeData } from "../utils/asyncStorage";
+import { useEffect, useState } from "react";
+import { getData, getLists, storeData } from "../utils/asyncStorage";
 import { ITasks } from "../interface/task";
 import showToast from "../utils/toast";
 
@@ -10,6 +10,19 @@ export default function AddTask({ navigation }: { navigation: any }) {
   const [minDate, setMinDate] = useState(new Date(Date.now()));
   const [taskTitle, setTaskTitle] = useState<string>("");
   const [taskNotes, setTaskNotes] = useState<string>("");
+  const [category, setCategory] = useState<string | undefined>();
+  const [customLists, setCustomLists] = useState<string[]>();
+
+  useEffect(() => {
+    // get the customLists
+    (async () => {
+      const lists = await getLists();
+
+      if (lists != null) {
+        setCustomLists(lists);
+      }
+    })();
+  }, []);
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -25,7 +38,8 @@ export default function AddTask({ navigation }: { navigation: any }) {
         notes: taskNotes,
         due: date,
         completed: false,
-        completedOn: null
+        completedOn: null,
+        customList: category
       };
   
       const tasks = await getData("tasks");
@@ -72,6 +86,7 @@ export default function AddTask({ navigation }: { navigation: any }) {
           themeVariant="dark"
         />
       </View>
+      
     </View>
   )
 }
